@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <title>Product View</title>
+</head>
+
+<body>
+   <div align="center">
+
+    <h1>Product View</h1>
+    <div>
+      <form th:action="@{/logout}" method="post">
+        <input type="submit" onclick="return confirm('Are you sure logging out?')" value="Logout"/>
+      </form>
+    </div>
+    <br>
+
+<br />
+<br />
+
+
+
+  <h2>Product Details</h2>
+
+  <div th:if="${product.id == null}">
+    <div th:text="'Product with Id[' + ${id} + '] not found'">
+      Product not found
+    </div>
+  </div>
+  <div th:if="${product.id != null}" th:object="${product}">
+    <p>
+      <label for="name" >Product Name</label>
+      <input type="text" id="name" disabled="true" th:value="*{name}" />
+    </p>
+
+    <p>
+      <label for="brand" >Brand</label>
+      <input type="text"  id="brand" disabled="true" th:value="*{brand}" />
+    </p>
+    <p>
+      <label for="madein" >Made in</label>
+      <input type="text"  id="madein" disabled="true" th:value="*{madein}" />
+    </p>
+    <p>
+      <label for="price" >Price</label>
+      <input type="text"  id="price" disabled="true" th:value="*{price}" />
+    </p>
+    <p>
+      <label for="expiredDate" >Expired Date</label>
+      <input type="text"  id="expiredDate" disabled="true" th:value="*{expiredDate}" />
+    </p>
+      <p>
+          <label for="description" >Description</label>
+          <input type="text"  id="description" disabled="true" th:value="*{description}" />
+      </p>
+
+
+  </div>
+
+     <div>
+      <a href="/">Go Back</a>
+     </div>
+
+ </div>
+
+</body>
+
+</html>

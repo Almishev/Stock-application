@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <title>Product Manager</title>
+</head>
+<body>
+<div align="center">
+    <h1>Product List</h1>
+    <div sec:authorize="isAuthenticated()">
+        Welcome <b><span sec:authentication="name">Username</span></b> &nbsp;
+        <i><span sec:authentication="principal.authorities">Roles</span></i>
+    </div>
+    <br>
+    <div>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" onclick="return confirm('Are you sure logging out?')" value="Logout"/>
+        </form>
+    </div>
+    <br>
+     <div sec:authorize="hasAnyAuthority('ADMIN')">
+    <button> <a href="/new" style="background-color:azure;color:#200eac;border-radius:5px ;
+    text-decoration:none;"> Create New Product</a>
+    </button>
+     </div>
+    <br/><br/>
+    <div>
+        <form th:action="@{/}" >
+            <input type="hidden" name="sortField" th:value="${sortField}">
+            <input type="hidden" name="sortDir" th:value="${sortDir}">
+            <b>Filer:</b>
+            <input type="text" placeholder="name" name="keyWord" th:value="${keyWord}" required />
+            &nbsp;
+            <input type="submit" value="Search" />
+            &nbsp;
+            <input type="button" value="Clear" onclick="clearFilter()"/>
+        </form>
+    </div>
+    &nbsp; &nbsp; &nbsp;
+
+    <script type="text/javascript">
+            function clearFilter(){
+            window.location='/';
+            }
+
+        </script>
+    <table border="1" cellpadding="10">
+        <thead>
+
+        <tr>
+            <th> <a th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir} + ${keyWord!=null ? '&keyWord=' + keyWord : ''}}">Product ID </a></th>
+            <th> <a th:href="@{'/page/' + ${currentPage} + '?sortField=name&sortDir=' + ${reverseSortDir}+ ${keyWord!=null ? '&keyWord=' + keyWord : ''}}"> Name </a></th>
+            <th> <a th:href="@{'/page/' + ${currentPage} + '?sortField=brand&sortDir=' + ${reverseSortDir}+ ${keyWord!=null ? '&keyWord=' + keyWord : ''}}">Brand </a></th>
+            <th> <a th:href="@{'/page/' + ${currentPage} + '?sortField=madein&sortDir=' + ${reverseSortDir}+ ${keyWord!=null ? '&keyWord=' + keyWord : ''}}">Made In </a></th>
+            <th> <a th:href="@{'/page/' + ${currentPage} + '?sortField=price&sortDir=' + ${reverseSortDir}+ ${keyWord!=null ? '&keyWord=' + keyWord : ''}}">Price </a></th>
+            <th> <a th:href="@{'/page/' + ${currentPage} + '?sortField=expiredDate&sortDir=' + ${reverseSortDir}+ ${keyWord!=null ? '&keyWord=' + keyWord : ''}}">Expired Date </a></th>
+            <th sec:authorize="hasAnyAuthority('ADMIN')">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${listProducts}">
+            <td th:text="${product.id}">Product ID</td>
+            <td th:text="${product.name}">Name</td>
+            <td th:text="${product.brand}">Brand</td>
+            <td th:text="${product.madein}">Made in</td>
+            <td th:text="${product.price}">Price</td>
+            <td th:text="${product.expiredDate}">Expired Date</td>
+            <td sec:authorize="hasAnyAuthority('ADMIN')">
+
+              <button>  <a th:href="@{/edit/{id}(id=${product.id})}" style="text-decoration:none;">Edit</a> </button>
+
+                &nbsp;
+                <button>   <a th:href="@{/delete/{id}(id=${product.id})}" onclick="return confirm('Are you sure delete this?')"
+                   style="text-decoration:none;">Delete</a> </button>
+                <button>  <a th:href="@{/view/{id}(id=${product.id})}" style="text-decoration:none;">View</a> </button>
+
+             </td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+        <div th:if = "${totalPages>1}">
+            <div class="row col-sm-10">
+                Total rows: [[ ${totalItems}]]    -
+
+					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                      <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+ ${keyWord!=null ? '&keyWord=' + keyWord : ''}}">[[${i}]]</a>
+                        <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+					</span>
+
+                    <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+ ${keyWord!=null ? '&keyWord=' + keyWord : ''}}">Next</a>
+                    <span th:unless="${currentPage < totalPages}">Next</span>
+
+                    <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+ ${keyWord!=null ? '&keyWord=' + keyWord : ''}}">Last</a>
+                    <span th:unless="${currentPage < totalPages}">Last</span>
+    </div>
+  </div>
+ </body>
+</html>

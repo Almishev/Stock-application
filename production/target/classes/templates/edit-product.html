@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>Create New Product</title>
+</head>
+<body>
+<div align="center">
+    <h1>Edit Product</h1>
+    <br />
+    <form action="#" th:action="@{/save}" th:object="${product}"
+          method="post">
+        <p>
+            <label for="id">Product ID: </label> <br>
+            <input type="text" id="id" th:field="*{id}" readonly="readonly">
+
+        </p>
+        <p>
+            <label for="name">Product Name: </label> <br>
+            <input type="text" id="name" th:field="*{name}">
+        </p>
+
+        <p>
+            <label for="brand">Product Brand: </label> <br>
+            <input type="text" id="brand" th:field="*{brand}">
+        </p>
+
+        <p>
+            <label for="madein">Maiden In: </label> <br>
+            <select name="madein" id="madein">
+                <option value="" selected disabled hidden>Choose here</option>
+                <option value="Macedonia">Macedonia</option>
+                <option value="Bulgaria">Bulgaria</option>
+                <option value="Greece">Greece</option>
+                <option value="Turkey">Turkey</option>
+            </select> <br>
+        </p>
+        <p>
+            <label for="price">Product Price: </label> <br>
+            <input type="text" id="price"  th:field="*{price}">
+        </p>
+
+        <p>
+            <label for="expiredDate">Expired date: </label> <br>
+            <input type="date" id="expiredDate"  th:field="*{expiredDate}">
+        </p>
+
+        <p>
+            <label for="description">Description: </label> <br>
+            <textarea id="description" name="description" rows="4" cols="30" th:field="*{description}"></textarea>
+        </p>
+
+        <div>
+            <button type="submit" onclick="return confirm('Are you sure editing is correct?')" style="background-color:azure;color:#200eac;border-radius:5px">Edit Product</button>
+        </div>
+
+    </form>
+    <br>
+    <div>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" onclick="return confirm('Are you sure logging out?')" value="Logout"/>
+        </form>
+    </div>
+</div>
+</body>
+</html>
